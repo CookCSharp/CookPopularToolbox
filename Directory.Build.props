@@ -1,0 +1,46 @@
+<Project>
+  <Import Project="Version.props" />
+  <PropertyGroup>
+	<TargetFrameworks>net6.0-windows</TargetFrameworks>
+	<UseWPF>true</UseWPF>
+	<UseWindowsForms>true</UseWindowsForms>
+	<!--统一所有项目输出目录-->
+	<OutputPath>$(SolutionDir)Output\bin\$(Configuration)</OutputPath>
+	<PackageOutputPath>$(OutputPath)</PackageOutputPath>
+	<BaseIntermediateOutputPath>$(SolutionDir)Output\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
+	<!--<IntermediateOutputPath>$(SolutionDir)Output\obj\$(Configuration)\$(MSBuildProjectName)</IntermediateOutputPath>-->
+	<UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
+	<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+	<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+	<Platforms>AnyCPU;x64;x86</Platforms>
+	<LangVersion>latest</LangVersion>
+	<!--指示编译器是否应为相同的输入产生相同的程序集-->
+	<Deterministic>true</Deterministic>
+	<WarningLevel>4</WarningLevel>
+	<Nullable>annotations</Nullable>
+	<SatelliteResourceLanguages>zh-Hans</SatelliteResourceLanguages>
+	<ProduceReferenceAssemblie>false</ProduceReferenceAssemblie>
+
+	<!--Nuget包说明配置 $(MSBuildToolsPath)-->
+	<PackageId>$(MSBuildProjectName)</PackageId>
+	<Authors>写代码的厨子</Authors>
+	<Company>CookCSharp</Company>
+	<Product>$(MSBuildProjectName)</Product>
+	<Title>$(MSBuildProjectName)</Title>
+	<Description>基于.Net6的工具箱</Description>
+	<Copyright>Copyright © 2022 CookCSharp. All rights reserved.</Copyright>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<PackageTags>windows,desktop,toolbox</PackageTags>
+	<RepositoryUrl>https://gitee.com/cook-csharp/$(MSBuildProjectName)</RepositoryUrl>
+	<PackageProjectUrl>https://github.com/chancezheng/CookPopularControl</PackageProjectUrl>
+	<PackageReleaseNotes>desktop toolkit</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<OutputPath>$(SolutionDir)Output\bin\Debug</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<OutputPath>$(SolutionDir)Output\bin\Release</OutputPath>
+  </PropertyGroup>
+</Project>
