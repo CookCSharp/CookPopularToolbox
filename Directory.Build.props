@@ -1,7 +1,7 @@
 <Project>
   <Import Project="Version.props" />
   <PropertyGroup>
-	<TargetFrameworks>net6.0-windows</TargetFrameworks>
+	<TargetFramework>net6.0-windows</TargetFramework>
 	<UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
 	<!--统一所有项目输出目录-->
