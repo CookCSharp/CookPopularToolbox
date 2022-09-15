@@ -43,4 +43,31 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	<OutputPath>$(SolutionDir)Output\bin\Release</OutputPath>
   </PropertyGroup>
+
+  <!--将引用包输出到指定目录-->
+  <ItemDefinitionGroup Condition="$(Configuration) == Release">
+	<ReferenceCopyLocalPaths>
+	  <DestinationSubDirectory>$(MSBuildProjectName)\</DestinationSubDirectory>
+	</ReferenceCopyLocalPaths>
+  </ItemDefinitionGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release">
+	<CreateItem Include="$(TargetDir)$(TargetName)*.*" Condition="$(TargetName) == 'AppHostPatcher'">
+	  <Output TaskParameter="Include" ItemName="MoveAppHostPatcherFilesAfterBuild" />
+	</CreateItem>
+	<Move SourceFiles="@(MoveAppHostPatcherFilesAfterBuild)" DestinationFolder="$(TargetDir)$(MSBuildProjectName)" />
+
+	<CreateItem Include="$(TargetDir)$(TargetName)*.*" Exclude="$(TargetDir)$(TargetName).exe" Condition="$(TargetName) != 'AppHostPatcher'">
+	  <Output TaskParameter="Include" ItemName="MoveFilesAfterBuild" />
+	</CreateItem>
+	<Move SourceFiles="@(MoveFilesAfterBuild)" DestinationFolder="$(TargetDir)$(MSBuildProjectName)" />
+
+	<!--example:AppHostPatcher\AppHostPatcher FileTools.exe FileTools\FileTools.dll-->
+	<PropertyGroup>
+	  <AppHostPatcherCommand>$(OutputPath)AppHostPatcher\AppHostPatcher.exe $(TargetDir)$(TargetName).exe $(MSBuildProjectName)\$(TargetFileName)</AppHostPatcherCommand>
+	</PropertyGroup>
+	<Exec WorkingDirectory="$(OutputPath)" Command="$(AppHostPatcherCommand)" Condition="$(TargetName) != 'AppHostPatcher'"/>
+	<Message Text="$(OutputPath)AppHostPatcher\AppHostPatcher.exe $(TargetDir)$(TargetName).exe $(MSBuildProjectName)\$(TargetFileName)" />
+  </Target>
+
 </Project>
