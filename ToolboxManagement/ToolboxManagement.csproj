@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+	<ApplicationIcon>App.ico</ApplicationIcon>
+	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProcessTools\ProcessTools.vcxproj" />
+  </ItemGroup>
 
 </Project>
