@@ -51,7 +51,7 @@
 	</ReferenceCopyLocalPaths>
   </ItemDefinitionGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release and $(TargetName) != 'ProcessTools'">
 	<CreateItem Include="$(TargetDir)$(TargetName)*.*" Condition="$(TargetName) == 'AppHostPatcher'">
 	  <Output TaskParameter="Include" ItemName="MoveAppHostPatcherFilesAfterBuild" />
 	</CreateItem>
