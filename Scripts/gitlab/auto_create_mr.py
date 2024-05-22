@@ -138,10 +138,10 @@ def get_all_users():
         users_info.append({'id': user['id'], 'username': user['username'], 'email': user['email']})
 
     print(users_info)
-    save_to_files(users_info)
+    save_to_file(users_info)
 
 
-def save_to_files(lst: list):
+def save_to_file(lst: list):
     keys = [str(x+1) for x in np.arange(len(lst))]
     list_json = dict(zip(keys, lst))
     # json?string

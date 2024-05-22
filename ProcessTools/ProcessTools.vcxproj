@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{68429024-9d76-4201-91eb-9374557048f6}</ProjectGuid>
     <RootNamespace>ProcessTools</RootNamespace>
@@ -74,9 +74,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)Output\bin\$(Platform)\$(Configuration)\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\obj\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)Output\bin\$(Platform)\$(Configuration)\$(ProjectName)</OutDir>
+    <IntDir>$(SolutionDir)Output\obj\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
