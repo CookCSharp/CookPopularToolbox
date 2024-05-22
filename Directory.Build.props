@@ -1,17 +1,19 @@
 <Project>
   <Import Project="Version.props" />
   <PropertyGroup>
-	<TargetFramework>net6.0-windows</TargetFramework>
-	<UseWPF>true</UseWPF>
+	<TargetFramework>net8.0-windows</TargetFramework>
 	<UseWindowsForms>true</UseWindowsForms>
+	<UseWPF>true</UseWPF>
 	<!--统一所有项目输出目录-->
-	<OutputPath>$(SolutionDir)Output\bin\$(Configuration)</OutputPath>
+	<BaseOutputPath>$(SolutionDir)Output\bin\$(Configuration)\$(TargetFramework)</BaseOutputPath>
+	<OutputPath>$(SolutionDir)Output\bin\$(Configuration)\$(TargetFramework)\$(MSBuildProjectName)</OutputPath>
 	<PackageOutputPath>$(OutputPath)</PackageOutputPath>
 	<BaseIntermediateOutputPath>$(SolutionDir)Output\obj\$(Configuration)\$(MSBuildProjectName)</BaseIntermediateOutputPath>
 	<!--<IntermediateOutputPath>$(SolutionDir)Output\obj\$(Configuration)\$(MSBuildProjectName)</IntermediateOutputPath>-->
 	<UseHostCompilerIfAvailable>false</UseHostCompilerIfAvailable>
 	<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 	<GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<Platforms>AnyCPU;x64;x86</Platforms>
 	<LangVersion>latest</LangVersion>
 	<!--指示编译器是否应为相同的输入产生相同的程序集-->
@@ -27,7 +29,7 @@
 	<Company>CookCSharp</Company>
 	<Product>$(MSBuildProjectName)</Product>
 	<Title>$(MSBuildProjectName)</Title>
-	<Description>基于.Net6的工具箱</Description>
+	<Description>基于.NTE8.0的工具箱</Description>
 	<Copyright>Copyright © 2022 CookCSharp. All rights reserved.</Copyright>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	<PackageTags>windows,desktop,toolbox</PackageTags>
@@ -36,38 +38,39 @@
 	<PackageReleaseNotes>desktop toolkit</PackageReleaseNotes>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	<OutputPath>$(SolutionDir)Output\bin\Debug</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	<OutputPath>$(SolutionDir)Output\bin\Release</OutputPath>
-  </PropertyGroup>
+  <Target Name="RemoveWpfTempFolder" AfterTargets="PostBuildEvent">
+    <Exec Command="FOR /D %%G in (&quot;$(MSBuildThisFileDirectory)Output\bin\$(Configuration)\$(TargetFramework)\*_*_wpftmp&quot;) DO RMDIR /S /Q &quot;%%~G&quot;" />
+  </Target>
 
   <!--将引用包输出到指定目录-->
-  <ItemDefinitionGroup Condition="$(Configuration) == Release">
+  <!--<ItemDefinitionGroup Condition="$(Configuration) == Release">
 	<ReferenceCopyLocalPaths>
 	  <DestinationSubDirectory>$(MSBuildProjectName)\</DestinationSubDirectory>
 	</ReferenceCopyLocalPaths>
-  </ItemDefinitionGroup>
+  </ItemDefinitionGroup>-->
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release and $(TargetName) != 'ProcessTools'">
-	<CreateItem Include="$(TargetDir)$(TargetName)*.*" Condition="$(TargetName) == 'AppHostPatcher'">
+	<!--<CreateItem Include="$(TargetDir)$(TargetName)*.*" Condition="$(TargetName) == 'AppHostPatcher'">
 	  <Output TaskParameter="Include" ItemName="MoveAppHostPatcherFilesAfterBuild" />
 	</CreateItem>
-	<Move SourceFiles="@(MoveAppHostPatcherFilesAfterBuild)" DestinationFolder="$(TargetDir)$(MSBuildProjectName)" />
+	<Move SourceFiles="@(MoveAppHostPatcherFilesAfterBuild)" DestinationFolder="$(TargetDir)$(MSBuildProjectName)" />-->
 
-	<CreateItem Include="$(TargetDir)$(TargetName)*.*" Exclude="$(TargetDir)$(TargetName).exe" Condition="$(TargetName) != 'AppHostPatcher'">
+	<!--<CreateItem Include="$(TargetDir)$(TargetName)*.*" Exclude="$(TargetDir)$(TargetName).exe" Condition="$(TargetName) != 'AppHostPatcher'">
 	  <Output TaskParameter="Include" ItemName="MoveFilesAfterBuild" />
 	</CreateItem>
-	<Move SourceFiles="@(MoveFilesAfterBuild)" DestinationFolder="$(TargetDir)$(MSBuildProjectName)" />
+	<Move SourceFiles="@(MoveFilesAfterBuild)" DestinationFolder="$(TargetDir)$(MSBuildProjectName)" />-->
+
+	<CreateItem Include="$(TargetDir)$(TargetName)*.exe" Condition="$(TargetName) != 'AppHostPatcher'">
+	  <Output TaskParameter="Include" ItemName="MoveFilesAfterBuild" />
+	</CreateItem>
+	<Move SourceFiles="@(MoveFilesAfterBuild)" DestinationFolder="$(TargetDir)..\" />
 
 	<!--example:AppHostPatcher\AppHostPatcher FileTools.exe FileTools\FileTools.dll-->
 	<PropertyGroup>
-	  <AppHostPatcherCommand>$(OutputPath)AppHostPatcher\AppHostPatcher.exe $(TargetDir)$(TargetName).exe $(MSBuildProjectName)\$(TargetFileName)</AppHostPatcherCommand>
+	  <AppHostPatcherCommand>$(BaseOutputPath)AppHostPatcher\AppHostPatcher.exe $(TargetDir)..\$(TargetName).exe $(MSBuildProjectName)\$(TargetFileName)</AppHostPatcherCommand>
 	</PropertyGroup>
 	<Exec WorkingDirectory="$(OutputPath)" Command="$(AppHostPatcherCommand)" Condition="$(TargetName) != 'AppHostPatcher'"/>
-	<Message Text="$(OutputPath)AppHostPatcher\AppHostPatcher.exe $(TargetDir)$(TargetName).exe $(MSBuildProjectName)\$(TargetFileName)" />
+	<Message Text="$(BaseOutputPath)AppHostPatcher\AppHostPatcher.exe $(TargetDir)..\$(TargetName).exe $(MSBuildProjectName)\$(TargetFileName)" />
   </Target>
 
 </Project>
